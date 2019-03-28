@@ -4,3 +4,20 @@ Class Dragon -->
 properties: nickname, birthdate, traits
 New dragon objects are instances of the Dragon class.
 Instances are objects based off the class with their own property values.
+
+
+Express.js
+
+--> A framework within Node.js to create a webserver and API
+
+API
+
+--> Set of related functions
+--> Web API exposes interaction from one entity to another
+--> HTTP (Hypertext Transfer Protocol)
+
+HTTP Protocol:
+
+WIth each request: header fields describe the request data,
+type field is the request type, and additional information...
+
