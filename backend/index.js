@@ -1,24 +1,9 @@
-const Dragon = require("./dragon");
+const GenerationEngine = require("./engine");
 
-// Creating an instance called "fooey"
-// of the "Dragon" class.
-const fooey = new Dragon({
-  birthdate: new Date(),
-  nickname: "fooey"
-});
-const baloo = new Dragon({
-  birthdate: new Date(),
-  nickname: "baloo",
-  traits: [{ traitType: "backgroundColor", traitValue: "blue" }]
-});
+const engine = new GenerationEngine();
 
-const mimar = new Dragon();
+engine.start();
 
 setTimeout(() => {
-  const gooby = new Dragon();
-  console.log(gooby);
-}, 3000);
-
-console.log(fooey);
-console.log(baloo);
-console.log(mimar);
+  engine.stop();
+}, 20000);
