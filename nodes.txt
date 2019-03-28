@@ -1,0 +1,6 @@
+Classes:
+
+Class Dragon -->
+properties: nickname, birthdate, traits
+New dragon objects are instances of the Dragon class.
+Instances are objects based off the class with their own property values.
