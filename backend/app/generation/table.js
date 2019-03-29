@@ -15,7 +15,7 @@ class GenerationTable {
   // Like an actual promise, we can fulfill
   // and resolve the promise and return data
   // or like an actual promise we can break
-  // the promise and reject it in the vent of an error.
+  // the promise and reject it in the event of an error.
 
   // We can control the return value of the promise
   // in the event of an error.

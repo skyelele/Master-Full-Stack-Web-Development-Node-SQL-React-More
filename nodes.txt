@@ -21,3 +21,82 @@ HTTP Protocol:
 WIth each request: header fields describe the request data,
 type field is the request type, and additional information...
 
+============
+Async functions
+============
+THe async function declaration defines an async function, which returns a AsyncFunction object.
+
+When async function is called, it returns a promise. WHen the async function returns a value, the promise will be resolved with the returned value. When the async function throws an exception or some value, the promise will be rejected with the thrown value.
+
+============
+Intro to asynchronous JavaScript
+============
+In asynchronous programs, you can have 2 lines of code (L1 followed by L2), where L1 schedules some task to be run in the future, but L2 runs before that task completes.
+
+You can imagine as if you are eating at a sit-down restaurant. Other people order their food. You can also order your food. you don't have to wait for them to receive their food and finish eating before you order. Similarly, other people don't have to wait for you to get your food and finish eating before they can order. Everybody will get their food as soon as it is finished cooking.
+
+The sequence in which people receive their food is often correlated with the sequence in which they ordered food, but these sequences do not always have to be identical. For example, if you order a steak, and then I order a glass of water, I will likely receive my order first, since it typically doens't take much time to serve a glass of water as it does to prepare and serve a steak.
+
+Note that asynchronous does not mean the same thing as concurrent or multi-threaded. Javascript can have asynchronous code, but it is generally single-threaded. This is like a restaurant with a single worker who does all of the waiting and cooking. But if this worker works quickly enough and can switch between tasks efficiently enough, then the restaurant seemingly has multiple workers.
+
+The setTimeout function is probably the simplest way to asynchronously schedule code to run in the future.
+
+setTimeout does not pause the execution of the code. IT only schedules something to happen in the future, and then immediately continues to the next line.
+
+========
+Getting data from AJAX requests
+========
+$get('example.php', function(response) {data = response})
+
+$get does not pause the execution of the code, it just schedules some code to run once the server responds. THat means the return data; line will run before data = 
+
+============
+What are JavaScript Promises?
+============
+
+- The guaranteed future of an eventual value.
+- The completion or failure of an asynchronous operation
+- Enforce order and coordinate asynchronous behavior
+
+|| How do they work? ||
+
+- Functions that accept a callback
+- Wraps around resolve and reject functions
+
+[ Resolve ]
+Asynchronous functionality has succeeded. Return a value.
+
+[ Reject ]
+The promise returns an error
+
+"There are two handlers that we use for JS promises"
+|| Handlers ||
+
+[ .then ]
+.then handler, with a callback to handle resolved values.
+
+[ .catch ]
+.catch handler, with a callback to handle error values
+
+========
+Promise EXAMPLE :)
+========
+
+const examplePromise = new Promise((resolve, reject) => {
+  const success = true;
+
+  if (success) {
+    resolve({ message: 'woohoo!'});
+  } else {
+    reject({ message: 'oh no...' })
+  }
+});
+
+examplePromise
+  .then(({ message }) => console.log('message', message))
+  .catch(error => console.log('error', error));
+
+|| CHAINING ||
+
+- Return promises as the result of promises
+- Chain multiple promises to enforce order over asynchronous tasks
