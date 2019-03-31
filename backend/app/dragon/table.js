@@ -1,4 +1,5 @@
 const pool = require("../../databasePool");
+const DragonTraitTable = require("../dragonTrait/table");
 
 class DragonTable {
   static storeDragon(dragon) {
@@ -34,8 +35,21 @@ class DragonTable {
 
           const dragonId = response.rows[0].id;
 
-          // I.e. Returning the dragonId :)
-          resolve({ dragonId });
+          // Makes sure each of the inner promises
+          // get resolved and return the .then
+          // handler in the same order
+          // that it was passed in.
+          Promise.all(
+            dragon.traits.map((traitType, traitValue) => {
+              return DragonTraitTable.storeDragonTrait({
+                dragonId,
+                traitType,
+                traitValue
+              });
+            })
+          )
+            .then(() => resolve({ dragonId }))
+            .catch(error => reject(error));
         }
       );
     });
