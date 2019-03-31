@@ -6,7 +6,7 @@ const DragonTable = require("../dragon/table");
 const router = new Router();
 
 // Defining a GET route to create a new dragon :)
-router.get("/new", (req, res) => {
+router.get("/new", (req, res, next) => {
   const dragon = req.app.locals.engine.generation.newDragon();
 
   DragonTable.storeDragon(dragon)
@@ -17,7 +17,7 @@ router.get("/new", (req, res) => {
 
       res.json({ dragon });
     })
-    .catch(error => console.error(error));
+    .catch(error => next(error));
 });
 
 // Exporting the GET new Dragon router

@@ -19,6 +19,16 @@ app.locals.engine = engine;
 app.use("/dragon", dragonRouter);
 app.use("/generation", generationRouter);
 
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+
+  // Sets status code for our response :)
+  res.status(statusCode).json({
+    type: "error",
+    message: err.message
+  });
+});
+
 // Calling start() method from engine (GenerationEngine class)
 engine.start();
 
