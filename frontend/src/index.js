@@ -11,11 +11,11 @@ import thunk from "redux-thunk";
 // Importing class-based component called "Generation"
 import Generation from "./components/Generation";
 import Dragon from "./components/Dragon";
-import { generationReducer } from "./reducers";
+import rootReducer from "./reducers";
 import "./index.css";
 
 const store = createStore(
-  generationReducer,
+  rootReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(thunk)
 );

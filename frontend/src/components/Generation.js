@@ -3,7 +3,8 @@ import React, { Component } from "react";
 // the store via props, you need to import
 // the connect module from react-redux;
 import { connect } from "react-redux";
-import { generationActionCreator } from "../actions/generation";
+import { fetchGeneration } from "../actions/generation";
+import fetchStates from "../reducers/fetchStates";
 
 const MINIMUM_DELAY = 3000;
 
@@ -35,6 +36,10 @@ class Generation extends Component {
   render() {
     // this.state.generation
     const { generation } = this.props;
+
+    if (generation.status === fetchStates.error) {
+      return <div>{generation.message}</div>;
+    }
 
     return (
       <div>
