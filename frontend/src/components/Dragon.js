@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Button } from "react-bootstrap";
+import DragonAvatar from "./DragonAvatar";
 
 const DEFAULT_DRAGON = {
   dragonId: "",
@@ -23,14 +25,20 @@ class Dragon extends Component {
   };
 
   render() {
-    const { generationId, dragonId, traits } = this.state.dragon;
+    // Passing props data as keys to the component
+    // itself, just like HTML attributes
 
+    // In the child component, you use
+    // this (the main component) .
+    // props (to inherit the dragon={this.state.dragon}) .
+    // dragon
+    // in order to destructure
+    // key/value pairs from the
+    // dragon state.
     return (
       <div>
-        <span>G{generationId}.</span>
-        <span>I{dragonId}. </span>
-
-        {traits.map(trait => trait.traitValue).join(", ")}
+        <Button onClick={this.fetchDragon}>New Dragon</Button>
+        <DragonAvatar dragon={this.state.dragon} />;
       </div>
     );
   }
