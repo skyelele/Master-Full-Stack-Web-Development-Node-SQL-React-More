@@ -18446,13 +18446,15 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var Generation =
 /*#__PURE__*/
@@ -18460,18 +18462,48 @@ function (_Component) {
   _inherits(Generation, _Component);
 
   function Generation() {
+    var _getPrototypeOf2;
+
+    var _this;
+
     _classCallCheck(this, Generation);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Generation).apply(this, arguments));
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Generation)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      generation: {
+        generationId: 999,
+        expiration: "2020-05-01"
+      }
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "fetchGeneration", function () {
+      fetch("http://localhost:3000/generation").then(function (response) {
+        return response.json();
+      }).then(function (json) {
+        console.log("json", json);
+      }).catch(function (error) {
+        return console.error("error", error);
+      });
+    });
+
+    return _this;
   }
 
   _createClass(Generation, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchGeneration();
+    }
+  }, {
     key: "render",
     value: function render() {
-      var generation = {
-        geneartionId: 999,
-        expiration: "2020-05-01"
-      };
+      // this.state.generation
+      var generation = this.state.generation;
       return _react.default.createElement("div", null, _react.default.createElement("h3", null, "Generation ", generation.generationId, ". Expires on:"), _react.default.createElement("h4", null, new Date(generation.expiration).toString()));
     }
   }]);
@@ -18524,7 +18556,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56882" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64639" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

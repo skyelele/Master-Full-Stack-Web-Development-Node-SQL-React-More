@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const GenerationEngine = require("./generation/engine");
 // Importing dragon router to make new dragon
 const dragonRouter = require("./api/dragon");
@@ -13,6 +14,7 @@ const engine = new GenerationEngine();
 // by using req.app.locals.engine...
 app.locals.engine = engine;
 
+app.use(cors({ origin: "http://localhost:1234" }));
 // You must make sure the app USES the dragon
 // via app.use("website route that calls that specific route",
 // name of route required/defined at top of main app code.)
