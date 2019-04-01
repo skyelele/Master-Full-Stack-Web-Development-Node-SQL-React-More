@@ -1,0 +1,22 @@
+{
+  "name": "dragonstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nf start",
+    "backend": "nodemon backend/bin/server",
+    "frontend": "parcel frontend/src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/skyelele/Master-Full-Stack-Web-Development-Node-SQL-React-More.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/skyelele/Master-Full-Stack-Web-Development-Node-SQL-React-More/issues"
+  },
+  "homepage": "https://github.com/skyelele/Master-Full-Stack-Web-Development-Node-SQL-React-More#readme"
+}

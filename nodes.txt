@@ -100,3 +100,15 @@ examplePromise
 
 - Return promises as the result of promises
 - Chain multiple promises to enforce order over asynchronous tasks
+
+
+=======
+STATE in React
+=======
+
+To begin, every component in React has its own local state.
+State is a collection of data that is represented through an object that updates throughout time as the application runs and is interacted with.
+
+Within the state, we can place variables that represent things that should appear in the render method.
+
+And, the state is where we'll place new variables of information when the user interacts with our component.
