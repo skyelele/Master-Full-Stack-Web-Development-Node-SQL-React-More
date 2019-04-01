@@ -21673,7 +21673,91 @@ if ("development" === 'production') {
 } else {
   module.exports = require('./cjs/react-dom.development.js');
 }
-},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"components/Generation.js":[function(require,module,exports) {
+},{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/redux-thunk/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function createThunkMiddleware(extraArgument) {
+  return function (_ref) {
+    var dispatch = _ref.dispatch,
+        getState = _ref.getState;
+    return function (next) {
+      return function (action) {
+        if (typeof action === 'function') {
+          return action(dispatch, getState, extraArgument);
+        }
+
+        return next(action);
+      };
+    };
+  };
+}
+
+var thunk = createThunkMiddleware();
+thunk.withExtraArgument = createThunkMiddleware;
+var _default = thunk;
+exports.default = _default;
+},{}],"actions/types.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GENERATION = void 0;
+var GENERATION = {
+  FETCH: "GENERATION_FETCH",
+  FETCH_ERROR: "GENERATION_FETCH_ERROR",
+  FETCH_SUCCESS: "GENERATION_FETCH_SUCCESS"
+};
+exports.GENERATION = GENERATION;
+},{}],"actions/generation.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchGeneration = void 0;
+
+var _types = require("./types");
+
+// applyMiddleware and thunk will handle this
+// action creator in such a way that
+// the function itself is returned
+// and not an object.
+var fetchGeneration = function fetchGeneration() {
+  return function (dispatch) {
+    dispatch({
+      type: _types.GENERATION.FETCH
+    });
+    return fetch("http://localhost:3001/generation").then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      if (json.type === "error") {
+        dispatch({
+          type: _types.GENERATION.FETCH_ERROR,
+          message: json.message
+        });
+      } else {
+        dispatch({
+          type: _types.GENERATION.FETCH_SUCCESS,
+          generation: json.generation
+        });
+      }
+    }).catch(function (error) {
+      return dispatch({
+        type: _types.GENERATION.FETCH_ERROR,
+        message: error.message
+      });
+    });
+  };
+};
+
+exports.fetchGeneration = fetchGeneration;
+},{"./types":"actions/types.js"}],"components/Generation.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -21684,6 +21768,8 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 
 var _reactRedux = require("react-redux");
+
+var _generation = require("../actions/generation");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -21707,10 +21793,6 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var DEFAULT_GENERATION = {
-  generationId: "",
-  expiration: ""
-};
 var MINIMUM_DELAY = 3000;
 
 var Generation =
@@ -21731,31 +21813,12 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Generation)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      generation: DEFAULT_GENERATION
-    });
-
     _defineProperty(_assertThisInitialized(_this), "timer", null);
 
-    _defineProperty(_assertThisInitialized(_this), "fetchGeneration", function () {
-      fetch("http://localhost:3001/generation").then(function (response) {
-        return response.json();
-      }).then(function (json) {
-        console.log("json", json); // Always use setState() function
-        // to update a state in React :) <3
-
-        _this.setState({
-          generation: json.generation
-        });
-      }).catch(function (error) {
-        return console.error("error", error);
-      });
-    });
-
     _defineProperty(_assertThisInitialized(_this), "fetchNextGeneration", function () {
-      _this.fetchGeneration();
+      _this.props.fetchGeneration();
 
-      var delay = new Date(_this.state.generation.expiration).getTime() - new Date().getTime();
+      var delay = new Date(_this.props.generation.expiration).getTime() - new Date().getTime();
 
       if (delay < MINIMUM_DELAY) {
         delay = MINIMUM_DELAY;
@@ -21798,9 +21861,28 @@ var mapStateToProps = function mapStateToProps(state) {
     generation: generation
   }; // Enables you to use this.props.generation
   // to access state.generation :)
+  // from the redux store.
+}; // applyMiddleware and thunk will handle this
+// action creator in such a way that
+// the function itself is returned
+// and not an object.
+
+
+var fetchGeneration = function fetchGeneration() {
+  return function (dispatch) {
+    return fetch("http://localhost:3001/generation").then(function (response) {
+      return response.json();
+    }).then(function (json) {
+      dispatch((0, _generation.generationActionCreator)(json.generation));
+    }).catch(function (error) {
+      return console.error("error", error);
+    });
+  };
 };
 
-var componentConnector = (0, _reactRedux.connect)(mapStateToProps); // Takes entire Generation component class
+var componentConnector = (0, _reactRedux.connect)(mapStateToProps, {
+  fetchGeneration: fetchGeneration
+}); // Takes entire Generation component class
 // as an argument, and as a result,
 // this now returns another component that has
 // redux properties mixed into it.
@@ -21815,7 +21897,7 @@ var _default = componentConnector(Generation); // Now, the generation component 
 
 
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js"}],"../node_modules/babel-runtime/node_modules/core-js/library/modules/_global.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-redux":"../node_modules/react-redux/es/index.js","../actions/generation":"actions/generation.js"}],"../node_modules/babel-runtime/node_modules/core-js/library/modules/_global.js":[function(require,module,exports) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
@@ -40636,16 +40718,7 @@ function (_Component) {
 
 var _default = Dragon;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","react-bootstrap":"../node_modules/react-bootstrap/es/index.js","./DragonAvatar":"components/DragonAvatar.js"}],"actions/types.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.GENERATION_ACTION_TYPE = void 0;
-var GENERATION_ACTION_TYPE = "GENERATION_ACTION_TYPE";
-exports.GENERATION_ACTION_TYPE = GENERATION_ACTION_TYPE;
-},{}],"reducers/index.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-bootstrap":"../node_modules/react-bootstrap/es/index.js","./DragonAvatar":"components/DragonAvatar.js"}],"reducers/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -40673,26 +40746,7 @@ var generationReducer = function generationReducer(state, action) {
 };
 
 exports.generationReducer = generationReducer;
-},{"../actions/types":"actions/types.js"}],"actions/generation.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.generationActionCreator = void 0;
-
-var _types = require("./types");
-
-// FUNCTION that is RETURNING an action object :)
-var generationActionCreator = function generationActionCreator(payload) {
-  return {
-    type: _types.GENERATION_ACTION_TYPE,
-    generation: payload
-  };
-};
-
-exports.generationActionCreator = generationActionCreator;
-},{"./types":"actions/types.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"../actions/types":"actions/types.js"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -40775,39 +40829,32 @@ var _reactRedux = require("react-redux");
 
 var _reactDom = require("react-dom");
 
+var _reduxThunk = _interopRequireDefault(require("redux-thunk"));
+
 var _Generation = _interopRequireDefault(require("./components/Generation"));
 
 var _Dragon = _interopRequireDefault(require("./components/Dragon"));
 
 var _reducers = require("./reducers");
 
-var _generation = require("./actions/generation");
-
 require("./index.css");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// Gives redux the ability to handle actions
+// dispatched as functions
 // Importing render module to render
 // code for our index page.
 // Importing class-based component called "Generation"
-var store = (0, _redux.createStore)(_reducers.generationReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()); // When store.subscribe() is fired,
-// it will log the current state of the store :)
-// Must call this before any store.dispatch() calls
-
-store.subscribe(function () {
-  return console.log("store state update", store.getState());
-});
-fetch("http://localhost:3001/generation").then(function (response) {
-  return response.json();
-}).then(function (json) {
-  store.dispatch((0, _generation.generationActionCreator)(json.generation));
-});
+var store = (0, _redux.createStore)(_reducers.generationReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), (0, _redux.applyMiddleware)(_reduxThunk.default));
 (0, _reactDom.render)( // Every component in our app will now be able to
 // access the store via PROPS.
+// In order for each component to use the store via props
+// you need to import { connect } from react-redux.
 _react.default.createElement(_reactRedux.Provider, {
   store: store
 }, _react.default.createElement("div", null, _react.default.createElement("h2", null, "Dragon Stack"), _react.default.createElement(_Generation.default, null), _react.default.createElement(_Dragon.default, null))), document.getElementById("root"));
-},{"react":"../node_modules/react/index.js","redux":"../node_modules/redux/es/redux.js","react-redux":"../node_modules/react-redux/es/index.js","react-dom":"../node_modules/react-dom/index.js","./components/Generation":"components/Generation.js","./components/Dragon":"components/Dragon.js","./reducers":"reducers/index.js","./actions/generation":"actions/generation.js","./index.css":"index.css"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","redux":"../node_modules/redux/es/redux.js","react-redux":"../node_modules/react-redux/es/index.js","react-dom":"../node_modules/react-dom/index.js","redux-thunk":"../node_modules/redux-thunk/es/index.js","./components/Generation":"components/Generation.js","./components/Dragon":"components/Dragon.js","./reducers":"reducers/index.js","./index.css":"index.css"}],"../../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -40835,7 +40882,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63766" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56381" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

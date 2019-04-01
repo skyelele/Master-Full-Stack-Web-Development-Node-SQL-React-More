@@ -1,9 +1,32 @@
-import { GENERATION_ACTION_TYPE } from "./types";
+import { GENERATION } from "./types";
 
-// FUNCTION that is RETURNING an action object :)
-export const generationActionCreator = payload => {
-  return {
-    type: GENERATION_ACTION_TYPE,
-    generation: payload
-  };
+// applyMiddleware and thunk will handle this
+// action creator in such a way that
+// the function itself is returned
+// and not an object.
+
+export const fetchGeneration = () => dispatch => {
+  dispatch({ type: GENERATION.FETCH });
+
+  return fetch("http://localhost:3001/generation")
+    .then(response => response.json())
+    .then(json => {
+      if (json.type === "error") {
+        dispatch({
+          type: GENERATION.FETCH_ERROR,
+          message: json.message
+        });
+      } else {
+        dispatch({
+          type: GENERATION.FETCH_SUCCESS,
+          generation: json.generation
+        });
+      }
+    })
+    .catch(error =>
+      dispatch({
+        type: GENERATION.FETCH_ERROR,
+        message: error.message
+      })
+    );
 };

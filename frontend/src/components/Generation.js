@@ -3,14 +3,11 @@ import React, { Component } from "react";
 // the store via props, you need to import
 // the connect module from react-redux;
 import { connect } from "react-redux";
-
-const DEFAULT_GENERATION = { generationId: "", expiration: "" };
+import { generationActionCreator } from "../actions/generation";
 
 const MINIMUM_DELAY = 3000;
 
 class Generation extends Component {
-  state = { generation: DEFAULT_GENERATION };
-
   timer = null;
 
   componentDidMount() {
@@ -21,24 +18,11 @@ class Generation extends Component {
     clearTimeout(this.timer);
   }
 
-  fetchGeneration = () => {
-    fetch("http://localhost:3001/generation")
-      .then(response => response.json())
-      .then(json => {
-        console.log("json", json);
-
-        // Always use setState() function
-        // to update a state in React :) <3
-        this.setState({ generation: json.generation });
-      })
-      .catch(error => console.error("error", error));
-  };
-
   fetchNextGeneration = () => {
-    this.fetchGeneration();
+    this.props.fetchGeneration();
 
     let delay =
-      new Date(this.state.generation.expiration).getTime() -
+      new Date(this.props.generation.expiration).getTime() -
       new Date().getTime();
 
     if (delay < MINIMUM_DELAY) {
@@ -68,9 +52,13 @@ const mapStateToProps = state => {
   return { generation };
   // Enables you to use this.props.generation
   // to access state.generation :)
+  // from the redux store.
 };
 
-const componentConnector = connect(mapStateToProps);
+const componentConnector = connect(
+  mapStateToProps,
+  { fetchGeneration }
+);
 
 // Takes entire Generation component class
 // as an argument, and as a result,
