@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+// In order for the Generation component to use
+// the store via props, you need to import
+// the connect module from react-redux;
+import { connect } from "react-redux";
 
 const DEFAULT_GENERATION = { generationId: "", expiration: "" };
 
@@ -46,7 +50,7 @@ class Generation extends Component {
 
   render() {
     // this.state.generation
-    const { generation } = this.state;
+    const { generation } = this.props;
 
     return (
       <div>
@@ -57,4 +61,28 @@ class Generation extends Component {
   }
 }
 
-export default Generation;
+// state = incoming state from REDUX :)
+const mapStateToProps = state => {
+  const generation = state.generation;
+
+  return { generation };
+  // Enables you to use this.props.generation
+  // to access state.generation :)
+};
+
+const componentConnector = connect(mapStateToProps);
+
+// Takes entire Generation component class
+// as an argument, and as a result,
+// this now returns another component that has
+// redux properties mixed into it.
+export default componentConnector(Generation);
+
+// Now, the generation component has access to
+// the data from the Redux store through
+// this.props
+
+// We can now use the generation from the
+// REDUX STATE and not the LOCAL STATE
+// like we coded before without importing
+// / utilizing redux.
