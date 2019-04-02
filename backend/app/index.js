@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 // name of route required/defined at top of main app code.)
 app.use("/dragon", dragonRouter);
 app.use("/generation", generationRouter);
-app.use("/generation", generationRouter);
+app.use("/account", accountRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

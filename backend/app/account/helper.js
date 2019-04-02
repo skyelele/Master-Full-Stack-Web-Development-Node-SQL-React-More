@@ -6,7 +6,7 @@ const hash = string => {
 
   // Specifically, SHA256() returns a more complex object with
   // some inner helper methods.
-  return SHA256(`${APP_SECRET}${secret}${APP_SECRET}`).toString();
+  return SHA256(`${APP_SECRET}${string}${APP_SECRET}`).toString();
 };
 
 module.exports = { hash };
