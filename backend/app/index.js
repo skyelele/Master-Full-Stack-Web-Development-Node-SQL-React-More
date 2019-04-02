@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const bodyParser = require("body-parser");
 const GenerationEngine = require("./generation/engine");
 // Importing dragon router to make new dragon
 const dragonRouter = require("./api/dragon");
 const generationRouter = require("./api/generation");
+const accountRouter = require("./api/account");
 
 // Creating new express app :)
 const app = express();
@@ -15,10 +17,12 @@ const engine = new GenerationEngine();
 app.locals.engine = engine;
 
 app.use(cors({ origin: "http://localhost:1234" }));
+app.use(bodyParser.json());
 // You must make sure the app USES the dragon
 // via app.use("website route that calls that specific route",
 // name of route required/defined at top of main app code.)
 app.use("/dragon", dragonRouter);
+app.use("/generation", generationRouter);
 app.use("/generation", generationRouter);
 
 app.use((err, req, res, next) => {
