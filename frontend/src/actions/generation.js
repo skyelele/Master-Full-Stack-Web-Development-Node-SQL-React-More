@@ -1,4 +1,5 @@
 import { GENERATION } from "./types";
+import { BACKEND } from "../config";
 
 // applyMiddleware and thunk will handle this
 // action creator in such a way that
@@ -8,7 +9,7 @@ import { GENERATION } from "./types";
 export const fetchGeneration = () => dispatch => {
   dispatch({ type: GENERATION.FETCH });
 
-  return fetch("http://localhost:3001/generation")
+  return fetch(`${BACKEND.ADDRESS}/generation`)
     .then(response => response.json())
     .then(json => {
       if (json.type === "error") {
