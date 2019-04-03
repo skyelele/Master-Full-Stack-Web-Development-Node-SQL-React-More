@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const GenerationEngine = require("./generation/engine");
 // Importing dragon router to make new dragon
 const dragonRouter = require("./api/dragon");
@@ -18,6 +19,7 @@ app.locals.engine = engine;
 
 app.use(cors({ origin: "http://localhost:1234" }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 // You must make sure the app USES the dragon
 // via app.use("website route that calls that specific route",
 // name of route required/defined at top of main app code.)
