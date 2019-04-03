@@ -1,6 +1,8 @@
 const { Router } = require("express");
 const AccountTable = require("../account/table.js");
 const { hash } = require("../account/helper");
+const Session = require("../account/session");
+const { setSession } = require("./helper");
 
 const router = new Router();
 
@@ -23,7 +25,10 @@ router.post("/signup", (req, res, next) => {
         throw error;
       }
     })
-    .then(() => res.json({ message: "success!" }))
+    .then(() => {
+      return setSession({ username, res });
+    })
+    .then(({ message }) => res.json({ message }))
     .catch(error => next(error));
 });
 

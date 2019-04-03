@@ -22,7 +22,7 @@ class AccountTable {
         `SELECT id, "passwordHash" FROM account
         WHERE "usernameHash" = $1`,
         [usernameHash],
-        (error, resolve) => {
+        (error, response) => {
           if (error) return reject(error);
 
           resolve({ account: response.rows[0] });
