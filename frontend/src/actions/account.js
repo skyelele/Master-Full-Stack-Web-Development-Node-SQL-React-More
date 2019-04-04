@@ -33,9 +33,28 @@ export const signup = ({ username, password }) =>
     SUCCESS_TYPE: ACCOUNT.FETCH_SUCCESS
   });
 
+export const login = ({ username, password }) =>
+  fetchFromAccount({
+    endpoint: "login",
+    options: {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    },
+    SUCCESS_TYPE: ACCOUNT.FETCH_SUCCESS
+  });
+
 export const logout = () =>
   fetchFromAccount({
     endpoint: "signup",
     options: { credentials: "include" },
     SUCCESS_TYPE: ACCOUNT.FETCH_SUCCESS
+  });
+
+export const fetchAuthenticated = () =>
+  fetchFromAccount({
+    endpoint: "authenticated",
+    options: { credentials: "include" },
+    SUCCESS_TYPE: ACCOUNT.FETCH_AUTHENTICATED_SUCCESS
   });
