@@ -17,7 +17,7 @@ const engine = new GenerationEngine();
 // by using req.app.locals.engine...
 app.locals.engine = engine;
 
-app.use(cors({ origin: "http://localhost:1234" }));
+app.use(cors({ origin: "http://localhost:1234", credentials: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 // You must make sure the app USES the dragon
