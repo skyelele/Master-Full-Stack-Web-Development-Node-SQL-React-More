@@ -4,7 +4,7 @@ import AuthForm from "./AuthForm";
 
 class Root extends Component {
   render() {
-    return true ? <Home /> : <Authform />;
+    return false ? <Home /> : <AuthForm />;
   }
 }
 
