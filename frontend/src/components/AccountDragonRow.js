@@ -6,6 +6,8 @@ import { BACKEND } from "../config";
 class AccountDragonRow extends Component {
   state = {
     nickname: this.props.dragons.nickname,
+    isPublic: this.props.dragon.isPublic,
+    saleValue: this.props.dragon.saleValue,
     edit: false
   };
 
@@ -56,7 +58,26 @@ class AccountDragonRow extends Component {
         />
         <br />
         <DragonAvatar dragon={this.props.dragon} />
-        {this.state.edit ? this.SaveButton : this.EditButton}
+        <div>
+          <span>
+            Sale Value:{' '}
+            <input
+              type='number',
+              disabled={!this.state.edit}
+              value={this.state.saleValue}
+            />
+          <span>
+            Public:{' '}
+            <input 
+              type='checkbox'
+              disabled={!this.state.edit}
+              checked={this.state.isPublic}
+            />
+          </span>
+          </span>
+          {this.state.edit ? this.SaveButton : this.EditButton}
+        </div>
+        
       </div>
     );
   }
