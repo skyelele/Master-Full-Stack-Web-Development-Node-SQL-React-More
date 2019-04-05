@@ -3,7 +3,14 @@ const DragonTraitTable = require("../dragonTrait/table");
 
 class DragonTable {
   static storeDragon(dragon) {
-    const { birthdate, nickname, generationId, isPublic, saleValue } = dragon;
+    const {
+      birthdate,
+      nickname,
+      generationId,
+      isPublic,
+      saleValue,
+      sireValue
+    } = dragon;
 
     // Returning a new promise as the result
     // of stored dragon, and then our callback is
@@ -25,11 +32,11 @@ class DragonTable {
       // quotes
       pool.query(
         // Dragon Entry
-        `INSERT INTO dragon(birthdate, nickname, "generationId", "isPublic", "saleValue") VALUES($1, $2, $3, $4, $5) RETURNING id`,
+        `INSERT INTO dragon(birthdate, nickname, "generationId", "isPublic", "saleValue", "sireValue") VALUES($1, $2, $3, $4, $5, $6) RETURNING id`,
         // Array with all the values we want to insert into
         // the sequence statement
         // Note: Order matters :)
-        [birthdate, nickname, generationId, isPublic, saleValue],
+        [birthdate, nickname, generationId, isPublic, saleValue, sireValue],
         (error, response) => {
           if (error) return reject(error);
 
@@ -58,7 +65,7 @@ class DragonTable {
   static getDragon({ dragonId }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT birthdate, nickname, "generationId", "isPublic", "saleValue" 
+        `SELECT birthdate, nickname, "generationId", "isPublic", "saleValue", "sireValue" 
         FROM dragon 
         WHERE dragon.id = $1`,
         [dragonId],
@@ -73,8 +80,8 @@ class DragonTable {
     });
   }
 
-  static updateDragon({ dragonId, nickname, isPublic, saleValue }) {
-    const settingsMap = { nickname, isPublic, saleValue };
+  static updateDragon({ dragonId, nickname, isPublic, saleValue, sireValue }) {
+    const settingsMap = { nickname, isPublic, saleValue, sireValue };
 
     const validQueries = Object.entries(settingsMap).filter(
       ([settingKey, settingValue]) => {
