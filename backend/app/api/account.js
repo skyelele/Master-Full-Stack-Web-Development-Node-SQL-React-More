@@ -110,12 +110,17 @@ router.get("/dragons", (req, res, next) => {
           return getDragonWithTraits({ dragonId: accountDragon.dragonId });
         })
       );
-      })
-      .then(dragons => {
-        res.json({ dragons });
-      });
+    })
+    .then(dragons => {
+      res.json({ dragons });
+    })
+    .catch(error => next(error));
+});
 
-      res.json({ accountDragons });
+router.get("/info", (req, res, next) => {
+  authenticatedAccount({ sessionString: req.cookies.sessionString })
+    .then(({ account, username }) => {
+      res.json({ info: { balance: account.balance, username } });
     })
     .catch(error => next(error));
 });
